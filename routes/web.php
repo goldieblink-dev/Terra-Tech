@@ -2,11 +2,13 @@
 
 use App\Http\Controllers\Admin\CompanyProfileController;
 use App\Http\Controllers\Admin\DashboardController as AdminDashboardController;
+use App\Http\Controllers\Editor\AnnouncementController;
 use App\Http\Controllers\Editor\DashboardController as EditorDashboardController;
 use App\Http\Controllers\Editor\InformationCategoryController;
 use App\Http\Controllers\Editor\InformationPostController;
 use App\Http\Controllers\Operator\DashboardController as OperatorDashboardController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\PublicAnnouncementController;
 use App\Http\Controllers\PublicInformationController;
 use App\Http\Controllers\SuperAdmin\DashboardController as SuperAdminDashboardController;
 use App\Http\Controllers\SuperAdmin\UserController as SuperAdminUserController;
@@ -18,6 +20,10 @@ use Illuminate\Support\Facades\Route;
 // ------------------------------------------------------------------
 Route::get('/information', [PublicInformationController::class, 'index'])->name('public.information.index');
 Route::get('/information/{slug}', [PublicInformationController::class, 'show'])->name('public.information.show');
+
+Route::get('/announcements', [PublicAnnouncementController::class, 'index'])->name('public.announcements.index');
+Route::get('/announcements/{slug}', [PublicAnnouncementController::class, 'show'])->name('public.announcements.show');
+Route::get('/announcements/{slug}/download', [PublicAnnouncementController::class, 'download'])->name('public.announcements.download');
 
 // ------------------------------------------------------------------
 // Root Redirect
@@ -52,9 +58,9 @@ Route::middleware(['auth', 'role:super_admin|admin'])->prefix('admin')->name('ad
 });
 
 // ------------------------------------------------------------------
-// CMS Shared: Information Module
-// Listing & Show  → super_admin | admin | editor | operator
-// Create/Update/Delete → super_admin | admin | editor only (enforced in controller)
+// CMS Shared: Modules (Information & Announcements)
+// Listing, Show & Download → super_admin | admin | editor | operator
+// Create/Update/Delete     → super_admin | admin | editor only (enforced in controller)
 // ------------------------------------------------------------------
 Route::middleware(['auth', 'role:super_admin|admin|editor|operator'])
     ->prefix('cms')
@@ -63,12 +69,8 @@ Route::middleware(['auth', 'role:super_admin|admin|editor|operator'])
 
     // Information Posts
     Route::get('information', [InformationPostController::class, 'index'])->name('information.index');
-
-    // CREATE harus sebelum parameter route
     Route::get('information/create', [InformationPostController::class, 'create'])->name('information.create');
     Route::post('information', [InformationPostController::class, 'store'])->name('information.store');
-
-    // Route parameter diletakkan setelah create
     Route::get('information/{informationPost}', [InformationPostController::class, 'show'])->name('information.show');
     Route::get('information/{informationPost}/edit', [InformationPostController::class, 'edit'])->name('information.edit');
     Route::put('information/{informationPost}', [InformationPostController::class, 'update'])->name('information.update');
@@ -81,6 +83,16 @@ Route::middleware(['auth', 'role:super_admin|admin|editor|operator'])
     Route::get('information-categories/{informationCategory}/edit', [InformationCategoryController::class, 'edit'])->name('information-categories.edit');
     Route::put('information-categories/{informationCategory}', [InformationCategoryController::class, 'update'])->name('information-categories.update');
     Route::delete('information-categories/{informationCategory}', [InformationCategoryController::class, 'destroy'])->name('information-categories.destroy');
+
+    // Announcements
+    Route::get('announcements', [AnnouncementController::class, 'index'])->name('announcements.index');
+    Route::get('announcements/create', [AnnouncementController::class, 'create'])->name('announcements.create');
+    Route::post('announcements', [AnnouncementController::class, 'store'])->name('announcements.store');
+    Route::get('announcements/{announcement}', [AnnouncementController::class, 'show'])->name('announcements.show');
+    Route::get('announcements/{announcement}/edit', [AnnouncementController::class, 'edit'])->name('announcements.edit');
+    Route::put('announcements/{announcement}', [AnnouncementController::class, 'update'])->name('announcements.update');
+    Route::delete('announcements/{announcement}', [AnnouncementController::class, 'destroy'])->name('announcements.destroy');
+    Route::get('announcements/{announcement}/download', [AnnouncementController::class, 'download'])->name('announcements.download');
 });
 
 // ------------------------------------------------------------------

@@ -70,6 +70,7 @@
         <a href="/" class="navbar-brand">Terra Tech</a>
         <div class="navbar-links">
             <a href="{{ route('public.information.index') }}" class="{{ request()->routeIs('public.information*') ? 'active' : '' }}">Informasi</a>
+            <a href="{{ route('public.announcements.index') }}" class="{{ request()->routeIs('public.announcements*') ? 'active' : '' }}">Pengumuman</a>
             @auth
                 <a href="{{ url('/dashboard') }}" style="color: #4f46e5; font-weight: 600;">CMS</a>
             @else
