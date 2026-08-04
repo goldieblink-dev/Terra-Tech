@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Admin\CompanyProfileController;
 use App\Http\Controllers\Admin\DashboardController as AdminDashboardController;
 use App\Http\Controllers\Editor\DashboardController as EditorDashboardController;
 use App\Http\Controllers\Operator\DashboardController as OperatorDashboardController;
@@ -29,6 +30,12 @@ Route::get('/dashboard', function () {
 
     return abort(403, 'Unauthorized role');
 })->middleware(['auth'])->name('dashboard');
+
+// Company Profile Routes (Shared for Super Admin & Admin)
+Route::middleware(['auth', 'role:super_admin|admin'])->prefix('admin')->name('admin.')->group(function () {
+    Route::get('company-profile', [CompanyProfileController::class, 'edit'])->name('company_profile.edit');
+    Route::put('company-profile', [CompanyProfileController::class, 'update'])->name('company_profile.update');
+});
 
 // Super Admin Routes
 Route::middleware(['auth', 'role:super_admin'])->prefix('super-admin')->name('super_admin.')->group(function () {
