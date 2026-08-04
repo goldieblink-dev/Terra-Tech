@@ -15,7 +15,8 @@ class PublicInformationController extends Controller
      */
     public function index(Request $request): View
     {
-        $cacheKey = InformationPost::CACHE_PREFIX . 'index'
+        $version = InformationPost::cacheVersion();
+        $cacheKey = InformationPost::CACHE_PREFIX . 'v' . $version . '_index'
             . '_c' . ($request->get('category', ''))
             . '_p' . ($request->get('page', 1));
 

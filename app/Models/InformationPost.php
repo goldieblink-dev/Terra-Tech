@@ -75,11 +75,46 @@ class InformationPost extends Model
     }
 
     /**
-     * Clear cache for published information posts.
+     * Cache version key for published posts.
+     */
+    public const CACHE_VERSION_KEY = 'published_information_version';
+
+    /**
+     * The "booted" method of the model.
+     */
+    protected static function booted(): void
+    {
+        static::saved(function () {
+            static::clearCache();
+        });
+
+        static::deleted(function () {
+            static::clearCache();
+        });
+
+        static::restored(function () {
+            static::clearCache();
+        });
+    }
+
+    /**
+     * Get current cache version for published information posts.
+     */
+    public static function cacheVersion(): int
+    {
+        return (int) Cache::get(self::CACHE_VERSION_KEY, 1);
+    }
+
+    /**
+     * Clear cache for published information posts by incrementing the cache version.
      */
     public static function clearCache(): void
     {
-        Cache::forget(self::CACHE_PREFIX . 'index');
+        if (Cache::has(self::CACHE_VERSION_KEY)) {
+            Cache::increment(self::CACHE_VERSION_KEY);
+        } else {
+            Cache::forever(self::CACHE_VERSION_KEY, 2);
+        }
     }
 
     /**
