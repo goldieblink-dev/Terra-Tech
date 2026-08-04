@@ -6,10 +6,12 @@ use App\Http\Controllers\Editor\AnnouncementController;
 use App\Http\Controllers\Editor\DashboardController as EditorDashboardController;
 use App\Http\Controllers\Editor\InformationCategoryController;
 use App\Http\Controllers\Editor\InformationPostController;
+use App\Http\Controllers\Editor\TimelineController;
 use App\Http\Controllers\Operator\DashboardController as OperatorDashboardController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\PublicAnnouncementController;
 use App\Http\Controllers\PublicInformationController;
+use App\Http\Controllers\PublicTimelineController;
 use App\Http\Controllers\SuperAdmin\DashboardController as SuperAdminDashboardController;
 use App\Http\Controllers\SuperAdmin\UserController as SuperAdminUserController;
 use Illuminate\Support\Facades\Auth;
@@ -24,6 +26,9 @@ Route::get('/information/{slug}', [PublicInformationController::class, 'show'])-
 Route::get('/announcements', [PublicAnnouncementController::class, 'index'])->name('public.announcements.index');
 Route::get('/announcements/{slug}', [PublicAnnouncementController::class, 'show'])->name('public.announcements.show');
 Route::get('/announcements/{slug}/download', [PublicAnnouncementController::class, 'download'])->name('public.announcements.download');
+
+Route::get('/timeline', [PublicTimelineController::class, 'index'])->name('public.timelines.index');
+Route::get('/timeline/{timeline}', [PublicTimelineController::class, 'show'])->name('public.timelines.show');
 
 // ------------------------------------------------------------------
 // Root Redirect
@@ -93,6 +98,15 @@ Route::middleware(['auth', 'role:super_admin|admin|editor|operator'])
     Route::put('announcements/{announcement}', [AnnouncementController::class, 'update'])->name('announcements.update');
     Route::delete('announcements/{announcement}', [AnnouncementController::class, 'destroy'])->name('announcements.destroy');
     Route::get('announcements/{announcement}/download', [AnnouncementController::class, 'download'])->name('announcements.download');
+
+    // Timelines
+    Route::get('timelines', [TimelineController::class, 'index'])->name('timelines.index');
+    Route::get('timelines/create', [TimelineController::class, 'create'])->name('timelines.create');
+    Route::post('timelines', [TimelineController::class, 'store'])->name('timelines.store');
+    Route::get('timelines/{timeline}', [TimelineController::class, 'show'])->name('timelines.show');
+    Route::get('timelines/{timeline}/edit', [TimelineController::class, 'edit'])->name('timelines.edit');
+    Route::put('timelines/{timeline}', [TimelineController::class, 'update'])->name('timelines.update');
+    Route::delete('timelines/{timeline}', [TimelineController::class, 'destroy'])->name('timelines.destroy');
 });
 
 // ------------------------------------------------------------------

@@ -21,6 +21,7 @@ class DatabaseSeeder extends Seeder
             CompanyProfileSeeder::class,
             InformationSeeder::class,
             AnnouncementSeeder::class,
+            TimelineSeeder::class,
         ]);
     }
 }
