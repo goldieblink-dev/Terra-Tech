@@ -1,6 +1,12 @@
 <?php
 
 use App\Http\Controllers\Api\V1\AuthController;
+use App\Http\Controllers\Api\V1\Cms\AnnouncementController as CmsAnnouncementController;
+use App\Http\Controllers\Api\V1\Cms\DashboardController as CmsDashboardController;
+use App\Http\Controllers\Api\V1\Cms\FileController as CmsFileController;
+use App\Http\Controllers\Api\V1\Cms\InformationController as CmsInformationController;
+use App\Http\Controllers\Api\V1\Cms\RegistrationFlowController as CmsRegistrationFlowController;
+use App\Http\Controllers\Api\V1\Cms\TimelineController as CmsTimelineController;
 use App\Http\Controllers\Api\V1\PublicAnnouncementController;
 use App\Http\Controllers\Api\V1\PublicFileController;
 use App\Http\Controllers\Api\V1\PublicInformationController;
@@ -45,5 +51,24 @@ Route::prefix('v1')->middleware('throttle:60,1')->group(function () {
 
     Route::get('registration-flow', [PublicRegistrationFlowController::class, 'index']);
     Route::get('registration-flow/{slug}', [PublicRegistrationFlowController::class, 'show']);
+
+    // CMS Dashboard API Endpoints
+    Route::prefix('cms/dashboard')->middleware('auth:sanctum')->group(function () {
+        Route::get('/', [CmsDashboardController::class, 'index']);
+        Route::get('stats', [CmsDashboardController::class, 'stats']);
+        Route::get('drafts', [CmsDashboardController::class, 'drafts']);
+        Route::get('activity', [CmsDashboardController::class, 'activity']);
+        Route::get('analytics', [CmsDashboardController::class, 'analytics']);
+        Route::get('system-health', [CmsDashboardController::class, 'systemHealth']);
+    });
+
+    // CMS Management API Endpoints (Backend-only for SPA/React consumption)
+    Route::prefix('cms')->middleware('auth:sanctum')->group(function () {
+        Route::apiResource('information', CmsInformationController::class);
+        Route::apiResource('announcements', CmsAnnouncementController::class);
+        Route::apiResource('timelines', CmsTimelineController::class);
+        Route::apiResource('files', CmsFileController::class);
+        Route::apiResource('registration-steps', CmsRegistrationFlowController::class);
+    });
 
 });

@@ -41,6 +41,18 @@ class Announcement extends Model
 
     protected static function booted(): void
     {
+        static::creating(function (Announcement $announcement) {
+            if (empty($announcement->slug)) {
+                $announcement->slug = static::generateUniqueSlug($announcement->title);
+            }
+        });
+
+        static::updating(function (Announcement $announcement) {
+            if ($announcement->isDirty('title') && !$announcement->isDirty('slug')) {
+                $announcement->slug = static::generateUniqueSlug($announcement->title, $announcement->id);
+            }
+        });
+
         static::saved(function () {
             static::clearCache();
         });

@@ -84,6 +84,18 @@ class InformationPost extends Model
      */
     protected static function booted(): void
     {
+        static::creating(function (InformationPost $post) {
+            if (empty($post->slug)) {
+                $post->slug = static::generateUniqueSlug($post->title);
+            }
+        });
+
+        static::updating(function (InformationPost $post) {
+            if ($post->isDirty('title') && !$post->isDirty('slug')) {
+                $post->slug = static::generateUniqueSlug($post->title, $post->id);
+            }
+        });
+
         static::saved(function () {
             static::clearCache();
         });
