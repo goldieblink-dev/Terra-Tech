@@ -22,6 +22,8 @@ class DatabaseSeeder extends Seeder
             InformationSeeder::class,
             AnnouncementSeeder::class,
             TimelineSeeder::class,
+            FileCategorySeeder::class,
+            RegistrationStepSeeder::class,
         ]);
     }
 }

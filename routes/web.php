@@ -4,13 +4,18 @@ use App\Http\Controllers\Admin\CompanyProfileController;
 use App\Http\Controllers\Admin\DashboardController as AdminDashboardController;
 use App\Http\Controllers\Editor\AnnouncementController;
 use App\Http\Controllers\Editor\DashboardController as EditorDashboardController;
+use App\Http\Controllers\Editor\FileCategoryController;
+use App\Http\Controllers\Editor\FileController;
 use App\Http\Controllers\Editor\InformationCategoryController;
 use App\Http\Controllers\Editor\InformationPostController;
+use App\Http\Controllers\Editor\RegistrationFlowController;
 use App\Http\Controllers\Editor\TimelineController;
 use App\Http\Controllers\Operator\DashboardController as OperatorDashboardController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\PublicAnnouncementController;
+use App\Http\Controllers\PublicFileController;
 use App\Http\Controllers\PublicInformationController;
+use App\Http\Controllers\PublicRegistrationFlowController;
 use App\Http\Controllers\PublicTimelineController;
 use App\Http\Controllers\SuperAdmin\DashboardController as SuperAdminDashboardController;
 use App\Http\Controllers\SuperAdmin\UserController as SuperAdminUserController;
@@ -29,6 +34,13 @@ Route::get('/announcements/{slug}/download', [PublicAnnouncementController::clas
 
 Route::get('/timeline', [PublicTimelineController::class, 'index'])->name('public.timelines.index');
 Route::get('/timeline/{timeline}', [PublicTimelineController::class, 'show'])->name('public.timelines.show');
+
+Route::get('/files', [PublicFileController::class, 'index'])->name('public.files.index');
+Route::get('/files/{slug}', [PublicFileController::class, 'show'])->name('public.files.show');
+Route::get('/files/{slug}/download', [PublicFileController::class, 'download'])->name('public.files.download');
+
+Route::get('/registration-flow', [PublicRegistrationFlowController::class, 'index'])->name('public.registration_flow.index');
+Route::get('/registration-flow/{slug}', [PublicRegistrationFlowController::class, 'show'])->name('public.registration_flow.show');
 
 // ------------------------------------------------------------------
 // Root Redirect
@@ -107,6 +119,33 @@ Route::middleware(['auth', 'role:super_admin|admin|editor|operator'])
     Route::get('timelines/{timeline}/edit', [TimelineController::class, 'edit'])->name('timelines.edit');
     Route::put('timelines/{timeline}', [TimelineController::class, 'update'])->name('timelines.update');
     Route::delete('timelines/{timeline}', [TimelineController::class, 'destroy'])->name('timelines.destroy');
+
+    // File Categories
+    Route::get('file-categories', [FileCategoryController::class, 'index'])->name('file-categories.index');
+    Route::get('file-categories/create', [FileCategoryController::class, 'create'])->name('file-categories.create');
+    Route::post('file-categories', [FileCategoryController::class, 'store'])->name('file-categories.store');
+    Route::get('file-categories/{fileCategory}/edit', [FileCategoryController::class, 'edit'])->name('file-categories.edit');
+    Route::put('file-categories/{fileCategory}', [FileCategoryController::class, 'update'])->name('file-categories.update');
+    Route::delete('file-categories/{fileCategory}', [FileCategoryController::class, 'destroy'])->name('file-categories.destroy');
+
+    // Files
+    Route::get('files', [FileController::class, 'index'])->name('files.index');
+    Route::get('files/create', [FileController::class, 'create'])->name('files.create');
+    Route::post('files', [FileController::class, 'store'])->name('files.store');
+    Route::get('files/{fileItem}', [FileController::class, 'show'])->name('files.show');
+    Route::get('files/{fileItem}/edit', [FileController::class, 'edit'])->name('files.edit');
+    Route::put('files/{fileItem}', [FileController::class, 'update'])->name('files.update');
+    Route::delete('files/{fileItem}', [FileController::class, 'destroy'])->name('files.destroy');
+    Route::get('files/{fileItem}/download', [FileController::class, 'download'])->name('files.download');
+
+    // Registration Steps
+    Route::get('registration-steps', [RegistrationFlowController::class, 'index'])->name('registration-steps.index');
+    Route::get('registration-steps/create', [RegistrationFlowController::class, 'create'])->name('registration-steps.create');
+    Route::post('registration-steps', [RegistrationFlowController::class, 'store'])->name('registration-steps.store');
+    Route::get('registration-steps/{registrationStep}', [RegistrationFlowController::class, 'show'])->name('registration-steps.show');
+    Route::get('registration-steps/{registrationStep}/edit', [RegistrationFlowController::class, 'edit'])->name('registration-steps.edit');
+    Route::put('registration-steps/{registrationStep}', [RegistrationFlowController::class, 'update'])->name('registration-steps.update');
+    Route::delete('registration-steps/{registrationStep}', [RegistrationFlowController::class, 'destroy'])->name('registration-steps.destroy');
 });
 
 // ------------------------------------------------------------------

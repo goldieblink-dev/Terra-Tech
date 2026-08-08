@@ -72,6 +72,8 @@
             <a href="{{ route('public.information.index') }}" class="{{ request()->routeIs('public.information*') ? 'active' : '' }}">Informasi</a>
             <a href="{{ route('public.announcements.index') }}" class="{{ request()->routeIs('public.announcements*') ? 'active' : '' }}">Pengumuman</a>
             <a href="{{ route('public.timelines.index') }}" class="{{ request()->routeIs('public.timelines*') ? 'active' : '' }}">Timeline</a>
+            <a href="{{ route('public.files.index') }}" class="{{ request()->routeIs('public.files*') ? 'active' : '' }}">Dokumen File</a>
+            <a href="{{ route('public.registration_flow.index') }}" class="{{ request()->routeIs('public.registration_flow*') ? 'active' : '' }}">Alur Pendaftaran</a>
             @auth
                 <a href="{{ url('/dashboard') }}" style="color: #4f46e5; font-weight: 600;">CMS</a>
             @else
