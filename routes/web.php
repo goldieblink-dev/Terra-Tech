@@ -1,7 +1,7 @@
 <?php
 
 use App\Http\Controllers\Admin\CompanyProfileController;
-use App\Http\Controllers\Admin\DashboardController as AdminDashboardController;
+use App\Http\Controllers\Admin\AdminDashboardController;
 use App\Http\Controllers\Editor\AnnouncementController;
 use App\Http\Controllers\Editor\DashboardController as EditorDashboardController;
 use App\Http\Controllers\Editor\FileCategoryController;
@@ -166,9 +166,9 @@ Route::middleware(['auth', 'role:super_admin'])->prefix('super-admin')->name('su
 });
 
 // ------------------------------------------------------------------
-// Admin Routes
+// Admin Routes (operational dashboard for all authenticated CMS roles)
 // ------------------------------------------------------------------
-Route::middleware(['auth', 'role:admin'])->group(function () {
+Route::middleware(['auth', 'role:super_admin|admin|editor|operator'])->group(function () {
     Route::get('/admin', AdminDashboardController::class)->name('admin.dashboard');
 });
 
